@@ -1,5 +1,6 @@
 import React from "react";
-import {Box, AppBar, Toolbar, Typography, CssBaseline, Button}  from '@mui/material'
+import {Box, AppBar, Toolbar, Typography, CssBaseline, Button, IconButton, Badge}  from '@mui/material'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const navItems = ["item1", "item2", "item3"];
 
@@ -16,10 +17,18 @@ function Header() {
                     
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item) => (
-                        <Button key={item} sx={{ color: '#fff' }}>
+                        <Button key={item} size="large" sx={{ color: '#fff' }}>
                             {item}
                         </Button>
                         ))}
+                        <Button size="small" color="inherit" sx={{ marginLeft: 10 }}>
+                            LOGIN
+                        </Button>
+                        <IconButton size="large" aria-label="shopping basket" color="inherit">
+                            <Badge badgeContent={1} color="error">
+                                <ShoppingBasketIcon/>
+                            </Badge>
+                        </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>
