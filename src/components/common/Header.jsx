@@ -21,7 +21,7 @@ function Header() {
                             {item}
                         </Button>
                         ))}
-                        <Button size="small" color="inherit" sx={{ marginLeft: 10 }}>
+                        <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>
                             LOGIN
                         </Button>
                         <IconButton size="large" aria-label="shopping basket" color="inherit">
