@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import Header from "../components/common/Header";
 import UserField from "../components/common/UserField";
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -30,13 +32,14 @@ function RegisterPage() {
     
                 if(response.data.result == "success") {
                     alert("회원가입 성공");
+                    navigate('/login');
                 } else {
                     alert(response.data.value);
                 }
             })
             .catch(error => {
                 console.error('요청 실패', error);
-            });
+            }); 
     }
 
     return(
