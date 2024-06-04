@@ -22,7 +22,7 @@ function UserField(props) {
                 >
                     <Typography fontWeight={800} variant="h5">{btn_name}</Typography>
                     {
-                        (props.type === 'register' || props.type === 'password') && 
+                        props.type !== 'login' && 
                         <TextField id="username" 
                             name="username"
                             fullWidth 
@@ -64,11 +64,11 @@ function UserField(props) {
                     </Button>
                     {props.type === 'login' && <Grid container>
                         <Grid item xs={10}>
-                            <Link href="#" variant="hover">
+                            <Link href="/find/email" variant="hover">
                             이메일 찾기
                             </Link>
                             /
-                            <Link href="#" variant="hover">
+                            <Link href="/find/password" variant="hover">
                             비밀번호 찾기
                             </Link>
                         </Grid>
