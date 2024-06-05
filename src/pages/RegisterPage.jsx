@@ -24,8 +24,8 @@ function RegisterPage() {
             password
         };
     
-        const url = 'http://localhost:8888/user/register';// 테스트
-    
+        const url = import.meta.env.VITE_API_URL + '/register';
+        
         axios.post(url, data) 
             .then(response => {
                 console.log("/user/register 응답");
