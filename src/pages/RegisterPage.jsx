@@ -25,7 +25,7 @@ function RegisterPage() {
             password
         };
     
-        const url = import.meta.env.VITE_API_URL + '/register';
+        const url = import.meta.env.VITE_API_URL + '/user/register';
         
         axios.post(url, data) 
             .then(response => {
