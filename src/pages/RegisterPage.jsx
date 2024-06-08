@@ -29,8 +29,6 @@ function RegisterPage() {
         
         axios.post(url, data) 
             .then(response => {
-                console.log("/user/register 응답");
-    
                 if(response.data.result == "success") {
                     alert("회원가입 성공");
                     navigate('/login');
