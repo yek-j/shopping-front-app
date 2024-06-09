@@ -1,7 +1,8 @@
 import React, {useState} from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
-import Header from "../components/common/Header";
-import UserField from "../components/common/UserField";
+import Header from "../../components/common/Header";
+import UserField from "../../components/common/UserField";
 
 function UserFindPage() {
     const { type } = useParams();

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Header from "../components/common/Header";
-import UserField from "../components/common/UserField";
+import Header from "../../components/common/Header";
+import UserField from "../../components/common/UserField";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
