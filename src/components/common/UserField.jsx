@@ -5,7 +5,8 @@ function UserField(props) {
     let btn_name = '로그인';
 
     if (props.type === 'register') btn_name = '회원가입';
-    else if (props.type !== 'login') btn_name = props.type + ' 찾기';
+    else if (props.type === 'email') btn_name ='이메일 찾기';
+    else if (props.type === 'password') btn_name ='비밀번호 재지정';
 
     return(
         <form method="post" onSubmit={props.submit}>
@@ -22,7 +23,7 @@ function UserField(props) {
                 >
                     <Typography fontWeight={800} variant="h5">{btn_name}</Typography>
                     {
-                        props.type !== 'login' && 
+                        (props.type === 'retister' || props.type === 'password') && 
                         <TextField id="username" 
                             name="username"
                             fullWidth 
@@ -43,7 +44,7 @@ function UserField(props) {
                         onChange={(event) => props.change({ email:event.target.value })}/> 
 
                     { 
-                        (props.type === 'login' || props.type === 'register') &&  
+                        props.type !== "email"  &&  
                         <TextField id="password" 
                         name="password"
                         fullWidth 
