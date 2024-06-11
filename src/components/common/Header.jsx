@@ -1,11 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
+import axios from "axios";
 
 const navItems = ["item1", "item2", "item3"];
 
 function Header() {
+    const [state, setState] = useState(false);
+
+    useEffect(() => {
+        if(localStorage.getItem('token') != null) {
+            setState(true);
+        }
+    }, [state]);
+
+    const handleLogout = async () => {
+        try {
+            const url = import.meta.env.VITE_API_URL + '/user/logout';
+            const res = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (res.data.result == "success") {
+                alert("로그아웃");
+                localStorage.clear();
+                setState(false);
+            } else {
+                alert("로그아웃 실패");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const login = <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGIN</Button>
+    const logout = <Button onClick={handleLogout} size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGOUT</Button>
+
     return(
         <Box sx={{ flexGrow: 1 }}>
             <CssBaseline/>
@@ -20,11 +53,14 @@ function Header() {
                             {item}
                         </Button>
                         ))}
-                        <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>
-                            LOGIN
-                        </Button>
+                        {
+                            state && logout
+                        }
+                        {
+                            !state && login
+                        }
                         <Tooltip title="마이페이지">
-                            <IconButton too href="/mypage" size="large" aria-label="person" color="inherit">
+                            <IconButton href="/mypage" size="large" aria-label="person" color="inherit">
                                 <PersonIcon/>
                             </IconButton>
                         </Tooltip>
