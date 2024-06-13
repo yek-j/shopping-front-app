@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
-import axios from "axios";
+import { Logout } from "../../user/logout";
 
 const navItems = ["item1", "item2", "item3"];
 
@@ -16,24 +16,8 @@ function Header() {
     }, [state]);
 
     const handleLogout = async () => {
-        try {
-            const url = import.meta.env.VITE_API_URL + '/user/logout';
-            const res = await axios.get(url, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-
-            if (res.data.result == "success") {
-                alert("로그아웃");
-                localStorage.clear();
-                setState(false);
-            } else {
-                alert("로그아웃 실패");
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        const result = await Logout();
+        setState(result);
     }
 
     const login = <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGIN</Button>
