@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
-import { Logout } from "../../user/logout";
-
-const navItems = ["item1", "item2", "item3"];
+import { Logout } from "../../js/user/logout";
 
 function Header() {
     const [state, setState] = useState(false);
+    const [navItems, setNavItems] = useState([]);
 
     useEffect(() => {
         if(localStorage.getItem('token') != null) {
             setState(true);
         }
+
+        // 카테고리 가져오기
+        setNavItems(["item1", "item2", "item3"]);
+
     }, [state]);
 
     const handleLogout = async () => {
