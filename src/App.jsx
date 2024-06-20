@@ -5,17 +5,22 @@ import RegisterPage from './pages/user/RegisterPage';
 import UserFindPage from './pages/user/UserFindPage';
 import MyPage from './pages/user/MyPage';
 import CartPage from './pages/item/CartPage';
+import ItemListPage from './pages/item/ItemListPage';
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (    
-    <Routes>
-      <Route index element={<Main/>}  />   
-      <Route path='/login' element={<LoginPage/>} />
-      <Route path='/register' element={<RegisterPage/>} />
-      <Route path='/find/:type' element={<UserFindPage/>} />  
-      <Route path='/mypage' element={<MyPage/>} />
-      <Route path='/cart' element={<CartPage/>} />
-    </Routes>
+    <RecoilRoot>
+      <Routes>
+        <Route index element={<Main/>}  />   
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path='/register' element={<RegisterPage/>} />
+        <Route path='/find/:type' element={<UserFindPage/>} />  
+        <Route path='/mypage' element={<MyPage/>} />
+        <Route path='/cart' element={<CartPage/>} />
+        <Route path='/category/:cid' element={ItemListPage} />
+      </Routes>
+    </RecoilRoot>
   )
 }
 

@@ -3,20 +3,29 @@ import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
 import { Logout } from "../../js/user/logout";
+import { useRecoilState } from "recoil";
+import { categoryState } from "../../js/state/categoryState";
+import { getCategory } from "../../js/item/category";
 
 function Header() {
     const [state, setState] = useState(false);
-    const [navItems, setNavItems] = useState([]);
+    const [category, setCategory] = useRecoilState(categoryState)
 
     useEffect(() => {
         if(localStorage.getItem('token') != null) {
             setState(true);
         }
+        
+        if(category.length === 0) {
+            // api로 카테고리 받아오기
+            //const test = getCategory();
+            // 임시
+            setCategory([{category_id: 1, name: 'item1'}, 
+                        {category_id: 2, name: 'item2'}, 
+                        {category_id: 3, name: 'item3'}]);
 
-        // 카테고리 가져오기
-        setNavItems(["item1", "item2", "item3"]);
-
-    }, [state]);
+        }
+    }, [state, category]);
 
     const handleLogout = async () => {
         const result = await Logout();
@@ -35,9 +44,13 @@ function Header() {
                           DevBabys Shop 
                         </Button>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item) => (
-                        <Button key={item} size="large" sx={{ color: '#fff' }}>
-                            {item}
+                        {category.map((item) => (
+                        <Button 
+                            href={`/category/${item.category_id}`}
+                            key={item.category_id} 
+                            size="large" 
+                            sx={{ color: '#fff' }}>
+                            {item.name}
                         </Button>
                         ))}
                         {
