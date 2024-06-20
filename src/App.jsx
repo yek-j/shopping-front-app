@@ -18,7 +18,7 @@ function App() {
         <Route path='/find/:type' element={<UserFindPage/>} />  
         <Route path='/mypage' element={<MyPage/>} />
         <Route path='/cart' element={<CartPage/>} />
-        <Route path='/category/:cid' element={ItemListPage} />
+        <Route path='/category/:cid' element={<ItemListPage/>} />
       </Routes>
     </RecoilRoot>
   )
