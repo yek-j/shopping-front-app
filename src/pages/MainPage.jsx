@@ -19,10 +19,32 @@ function Main() {
         sx={{marginTop: 10}}
       >
         <h1>Best</h1>
-        <ItemList/>
+        <ItemList items={itemData} col={3} w={800} h={'300'}/>
       </Grid>
     </>
   )
 }
 
 export default Main;
+
+// 임시 데이터
+const itemData = [
+  {
+    productId: 1,
+    primaryUrl: '/test/test1.png',
+    title: 'item1',
+    price:1000,
+  },
+  {
+    productId: 2,
+    primaryUrl: '/test/test2.png',
+    title: 'item2',
+    price:2000,
+  },
+  {
+    productId: 3,
+    primaryUrl: '/test/test3.png',
+    title: 'item3',
+    price:3000,
+  },
+];
