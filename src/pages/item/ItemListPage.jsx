@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
 import { useParams } from "react-router-dom";
 import { Box, Stack, CssBaseline, Pagination } from "@mui/material";
-import { useRecoilCallback } from "recoil";
-import { categoryState } from "../../js/state/categoryState";
+import { useRecoilValueLoadable } from "recoil";
+import { categorySelector } from "../../js/state/categoryState";
 import ItemList from "../../components/content/ItemList";
 
 function ItemListPage() {
     const { cid } = useParams();
+    const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
     const [categoryName, setCategoryName] = useState('');
-    
-
-    const updateCategory = useRecoilCallback(({ snapshot }) => async () => {
-        // 현재 categoryState 가져오기
-        const curCategory = await snapshot.getPromise(categoryState);
-        const target = curCategory.find(obj => obj.category_id === Number(cid));
-        setCategoryName(target.name);
-    }, []);
 
     useEffect(() => {
-        updateCategory();
-    },[updateCategory]);
+      const fetchCategory = async () => {
+        const category = await useCategoryLoadable.contents;
+        const target = await category.find(obj => obj.categoryId === Number(cid));
+        setCategoryName(target.name);
+      }
+      fetchCategory()
+    },[cid]); 
 
     return(
         <Box

@@ -3,33 +3,35 @@ import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
 import { Logout } from "../../js/user/logout";
-import { useRecoilState } from "recoil";
-import { categoryState } from "../../js/state/categoryState";
-import { getCategory } from "../../js/item/category";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { categoryAtom, categorySelector } from "../../js/state/categoryState";
+import { Link } from "react-router-dom";
 
 function Header() {
     const [state, setState] = useState(false);
-    const [category, setCategory] = useRecoilState(categoryState)
+    const [category, setCategory] = useState([]);
+    const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
+    const [categoryState, setCategoryState] = useRecoilState(categoryAtom);
 
     useEffect(() => {
         if(localStorage.getItem('token') != null) {
             setState(true);
         }
-        
         if(category.length === 0) {
-            // api로 카테고리 받아오기
-            //const test = getCategory();
-            // 임시
-            setCategory([{category_id: 1, name: 'item1'}, 
-                        {category_id: 2, name: 'item2'}, 
-                        {category_id: 3, name: 'item3'}]);
-
+            fetchCategory();
         }
-    }, [state, category]);
+    }, [state, useCategoryLoadable]);
 
     const handleLogout = async () => {
         const result = await Logout();
         setState(result);
+    }
+
+    const fetchCategory = () => {
+        if(useCategoryLoadable.state === 'hasValue') {
+            setCategoryState(useCategoryLoadable.contents);
+        }
+        setCategory(categoryState);
     }
 
     const login = <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGIN</Button>
@@ -46,8 +48,9 @@ function Header() {
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {category.map((item) => (
                         <Button 
-                            href={`/category/${item.category_id}`}
-                            key={item.category_id} 
+                            component={Link}
+                            to={`/category/${item.categoryId}`}
+                            key={item.categoryId} 
                             size="large" 
                             sx={{ color: '#fff' }}>
                             {item.name}
