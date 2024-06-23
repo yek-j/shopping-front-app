@@ -17,7 +17,7 @@ export const Logout = async () => {
             alert("로그아웃 실패");
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 
     return true;

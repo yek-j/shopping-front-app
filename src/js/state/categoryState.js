@@ -10,7 +10,7 @@ export const categorySelector = selector({
     key: 'categorySelector',
     get: async ({ get }) => {
         const categorylist = await get(categoryAtom);
-        console.log(categorylist);
+
         if(categorylist.length === 0) {
             const res = await axios.get(import.meta.env.VITE_API_URL + '/product/category/list');
             return res.data.value;
