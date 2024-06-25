@@ -27,9 +27,9 @@ function Header() {
         setState(result);
     }
 
-    const fetchCategory = () => {
+    const fetchCategory = async () => {
         if(useCategoryLoadable.state === 'hasValue') {
-            setCategoryState(useCategoryLoadable.contents);
+           await setCategoryState(useCategoryLoadable.contents.data);
         }
         setCategory(categoryState);
     }
