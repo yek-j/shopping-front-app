@@ -3,7 +3,7 @@ import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
 import { Logout } from "../../js/user/logout";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { categoryAtom, categorySelector } from "../../js/state/categoryState";
 import { Link } from "react-router-dom";
 
@@ -17,21 +17,16 @@ function Header() {
         if(localStorage.getItem('token') != null) {
             setState(true);
         }
-        if(category.length === 0) {
-            fetchCategory();
-        }
-    }, [state, useCategoryLoadable]);
+        
+        if(category.length === 0 && useCategoryLoadable.state === 'hasValue') {
+            setCategoryState(useCategoryLoadable.contents);
+        } 
+        setCategory(categoryState);
+    }, [state, useCategoryLoadable.state, useCategoryLoadable.contents ]);
 
     const handleLogout = async () => {
         const result = await Logout();
         setState(result);
-    }
-
-    const fetchCategory = async () => {
-        if(useCategoryLoadable.state === 'hasValue') {
-           await setCategoryState(useCategoryLoadable.contents.data);
-        }
-        setCategory(categoryState);
     }
 
     const login = <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGIN</Button>
