@@ -5,21 +5,38 @@ import { Box, Stack, CssBaseline, Pagination } from "@mui/material";
 import { useRecoilValueLoadable } from "recoil";
 import { categorySelector } from "../../js/state/categoryState";
 import ItemList from "../../components/content/ItemList";
+import { getCategoryItemList } from "../../js/item/categoryItemList";
 
 function ItemListPage() {
     const { cid } = useParams();
     const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
     const [categoryName, setCategoryName] = useState('');
+    const [categoryItemList, setCategoryItemList] = useState([]);
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(1);
 
     useEffect(() => {
-      const fetchCategory = async () => {
-        const category = await useCategoryLoadable.contents;
-        const target = await category.find(obj => obj.categoryId === Number(cid));
-        setCategoryName(target.name);
-      }
-      fetchCategory()
-    },[cid]); 
+      fetchCategory();
+      fetchList();
+    },[cid, page]); 
 
+    const fetchCategory = async () => {
+      const category = await useCategoryLoadable.contents;
+      const target = await category.find(obj => obj.categoryId === Number(cid));
+      setCategoryName(target.name);
+    }
+
+    const fetchList = async () => {
+      const list = await getCategoryItemList(cid, page, 4);
+      setTotal(Math.ceil(list.total / 8)); // count 구하기
+      setCategoryItemList(list.data);
+    } 
+
+    const handlePageChange = (event, curPage) => {
+      setPage(curPage);
+    }
+
+    // pa
     return(
         <Box
             style={{
@@ -36,9 +53,10 @@ function ItemListPage() {
                 alignItems="center"
                 ml={2} mr={2}
             >
-                <ItemList items={itemData} col={4} h={'10000'}/>
+                <ItemList items={categoryItemList} col={4} h={'10000'}/>
                 <Pagination 
-                    count={10}
+                    count={total}
+                    onChange={handlePageChange}
                     style={{
                         marginBottom: 30,
                     }}/>
@@ -48,43 +66,3 @@ function ItemListPage() {
 }
 
 export default ItemListPage;
-
-// 임시 데이터
-const itemData = [
-    {
-      productId: 1,
-      primaryUrl: '/test/test1.png',
-      title: 'item1',
-      price:1000,
-    },
-    {
-      productId: 2,
-      primaryUrl: '/test/test2.png',
-      title: 'item2',
-      price:2000,
-    },
-    {
-      productId: 3,
-      primaryUrl: '/test/test3.png',
-      title: 'item3',
-      price:3000,
-    },
-    {
-      productId: 4,
-      primaryUrl: '/test/test1.png',
-      title: 'item4',
-      price:1000,
-    },
-    {
-      productId: 5,
-      primaryUrl: '/test/test2.png',
-      title: 'item5',
-      price:2000,
-    },
-    {
-      productId: 6,
-      primaryUrl: '/test/test3.png',
-      title: 'item6',
-      price:3000,
-    },
-  ];

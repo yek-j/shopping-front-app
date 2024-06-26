@@ -6,9 +6,6 @@ export const getCategoryItemList = async (categoryId, page, size) => {
     try {
         const res = await axios.get(url, 
             {
-                headers: {
-                'Authorization': `Bearer ${localStorage.getItem("token")}`
-                },
                  params : {page: page, size: size}
             }
         );
