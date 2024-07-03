@@ -36,7 +36,6 @@ function ItemListPage() {
       setPage(curPage);
     }
 
-    // pa
     return(
         <Box
             style={{

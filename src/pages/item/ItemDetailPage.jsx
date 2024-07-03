@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../components/common/Header";
+import { Box } from "@mui/material";
+import axios from "axios";
 
 function ItemDetailPage() {
     const { id } = useParams();
+
+    useEffect(() => {
+        getDetail();
+    },[]);
+
+    // test
+    const getDetail = async () => {
+        const url = `${import.meta.env.VITE_API_URL}/product/${id}`;
+        try {
+            const res = await axios.get(url);
+            console.log(res);
+        }catch(e) {
+            console.error(e);
+        }
+    }
+
     return (
-        <div>
+        <Box
+            style={{
+                height: '100vh',
+            }}
+        >
             <Header/>
-            <h1>{id}</h1>
-        </div>
+            <Box>
+                
+            </Box>
+        </Box>
     );
 } 
 
