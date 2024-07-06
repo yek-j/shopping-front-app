@@ -10,7 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 function Carousel(props) {
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: props.imgs.length > 1,
         speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -20,19 +20,24 @@ function Carousel(props) {
         autoplaySpeed: 3000,
         arrows: false
     };
-    
     return (
         <div className="slider-container">
-
+          
           <Slider {...settings}>
             {
-              props.imgs.map((img, index) => (
+              props.imgs.map((img,index) => (
                 
                 <Box
                   key={index}
                   component="img"
-                  sx={{ width: props.w, height: props.h }}
-                  src={ img.url } />
+                  sx={{ 
+                    width: props.w, 
+                    height: props.h,
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                  src={ img.url } 
+                  />
               ))
             }
          </Slider>

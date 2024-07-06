@@ -33,7 +33,7 @@ function ItemDetail(props) {
         >
             <Grid container spacing={8} padding={10}>
                 <Grid item xs={6}>
-                    <Carousel imgs={arrImg} w={'100vh'} h={130} />
+                    <Carousel imgs={arrImg} w={'100vh'} h={300} />
                 </Grid>
                 <Grid item xs={6}>
                     <h1>{props.item.name}</h1>
