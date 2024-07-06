@@ -7,11 +7,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 // React Slick 라이브러리 사용
-function Carousel() {
+function Carousel(props) {
     const settings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         lazyLoad: true,
@@ -20,23 +20,21 @@ function Carousel() {
         autoplaySpeed: 3000,
         arrows: false
     };
-
+    
     return (
         <div className="slider-container">
 
           <Slider {...settings}>
-            <Box
-              component="img"
-              sx={{ width: '100vw', height: 300 }}
-              src="/test/test1.png" />
-            <Box
-              component="img"
-              sx={{ width: '100vw', height: 300 }}
-              src="/test/test2.png" />
-            <Box
-              component="img"
-              sx={{ width: '100vw', height: 300 }}
-              src="/test/test3.png" />
+            {
+              props.imgs.map((img, index) => (
+                
+                <Box
+                  key={index}
+                  component="img"
+                  sx={{ width: props.w, height: props.h }}
+                  src={ img.url } />
+              ))
+            }
          </Slider>
         </div>
       );
