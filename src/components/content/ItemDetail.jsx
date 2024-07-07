@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "./Carousel";
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import { Box, Button, Divider, Grid, Stack, TextField } from "@mui/material";
 import { getCurrentPrice, movePrimaryItem } from "../../js/item/itemDetail";
+import ItemReview from "./ItemReview";
 
 function ItemDetail(props) {
     const [arrImg, setArrImg] = useState([]);
@@ -60,7 +61,17 @@ function ItemDetail(props) {
                     </Stack>
                 </Grid>
              </Grid>
-             {/* 상품 설명 & 리뷰 */}
+             <Box paddingX={10} >
+                <h2>상품 설명</h2>
+                <Divider sx={{ marginBottom: 3 }} />
+                {props.item.description}
+             </Box>
+             
+             <Box paddingX={10} paddingTop={10}>
+                <h2>Review</h2>
+                <Divider sx={{ marginBottom: 3 }} />
+                <ItemReview pid={props.item.productId} />
+             </Box>
         </Box>
     );
 }
