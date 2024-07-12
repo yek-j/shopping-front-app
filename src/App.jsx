@@ -8,6 +8,7 @@ import CartPage from './pages/item/CartPage';
 import ItemListPage from './pages/item/ItemListPage';
 import { RecoilRoot } from 'recoil';
 import ItemDetailPage from './pages/item/ItemDetailPage';
+import AdminPage from './pages/admin/AdminPage';
 
 function App() {
   return (    
@@ -21,6 +22,7 @@ function App() {
         <Route path='/cart' element={<CartPage/>} />
         <Route path='/category/:cid' element={<ItemListPage/>} />
         <Route path='/item/:id' element={<ItemDetailPage/>} />
+        <Route path='/admin' element={<AdminPage/>} />
       </Routes>
     </RecoilRoot>
   )
