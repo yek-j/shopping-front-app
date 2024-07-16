@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
-import { Logout } from "../../js/user/logout";
+import { Logout, getTokenWithExpiry } from "../../js/user/logout";
 import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { categoryAtom, categorySelector } from "../../js/state/categoryState";
 import { Link } from "react-router-dom";
@@ -14,7 +14,8 @@ function Header() {
     const [categoryState, setCategoryState] = useRecoilState(categoryAtom);
 
     useEffect(() => {
-        if(localStorage.getItem('token') != null) {
+        const token = getTokenWithExpiry();
+        if(token != null) {
             setState(true);
         }
         

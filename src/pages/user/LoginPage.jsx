@@ -32,7 +32,12 @@ function LoginPage() {
         try {
             const res = await axios.post(url, data);
             if(res.data.result == "success") {
-                localStorage.setItem("token", res.data.value);
+                const now = new Date();
+                const token = {
+                    value: res.data.value,
+                    expiry: now.getTime() + 12 * 60 * 60 * 1000, // 12시간 유효기간
+                }
+                localStorage.setItem("token", JSON.stringify(token));
                 navigate('/');
             } else {
                 setMessage("이메일이나 패스워드가 틀렸습니다.");
