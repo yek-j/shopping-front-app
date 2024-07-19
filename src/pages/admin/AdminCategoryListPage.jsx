@@ -1,34 +1,23 @@
-import { List, ListItem, ListItemText } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { Divider, List, ListItem, ListItemText } from "@mui/material";
 import AdminCategory from "../../components/content/AdminCategory";
-
-function AdminCategoryListPage() {
-    const [categoryList, setCategoryList] = useState([{categoryId:1, name:'123', description:'123'}]);
-
-    useEffect(() => {
-        getCategoryList();
-    }, []); 
-
-    const getCategoryList = async () => {
-        const res = await axios.get(import.meta.env.VITE_API_URL + '/product/category/list');
-        setCategoryList(res.data.value.data);
-    }
+function AdminCategoryListPage(props) {
 
     return(
         <List>
-            {categoryList.length === 0 && <span>카테고리가 없습니다.</span>}
-            {categoryList.map((category) => (
-                
-                <ListItem key={category.categoryId} alignItems="flex-start">
-                    <ListItemText
-                        primary={category.name}
-                        secondary={
-                            <AdminCategory description={category.description}/>
-                        }
-                        secondaryTypographyProps={{component: 'div'}}
-                    />
-                </ListItem>
+            {props.list.length === 0 && <span>카테고리가 없습니다.</span>}
+            {props.list.map((category) => (
+                <div key={category.categoryId}>
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary={category.name}
+                            secondary={
+                                <AdminCategory description={category.description}/>
+                            }
+                            secondaryTypographyProps={{component: 'div'}}
+                        />
+                    </ListItem>
+                    <Divider sx={{ mr: { xs: 1, sm: 15, md: 22 } }} />
+                </div>
             ))}
         </List>
     );
