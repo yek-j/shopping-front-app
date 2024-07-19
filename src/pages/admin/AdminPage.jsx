@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Box, CssBaseline, Tab, Tabs, Toolbar } from "@mui/material";
 import AdminTabPanel from "../../components/common/AdminTabPanel";
 import AdminCategoryAddPage from "./AdminCategoryAddPage";
 import AdminCategoryListPage from "./AdminCategoryListPage";
+import AdminItemAddPage from "./AdminItemAddPage";
+import { getCategoryList } from "../../js/admin/admin";
 
 function AdminPage() {
     const [tab, setTab] = useState(0);
+    const [categoryList, setCategoryList] = useState([]);
+
+    useEffect(() => {
+        fetchCategoryList();
+    }, []);
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
+    }
+
+    const fetchCategoryList = async () => {
+        const data = await getCategoryList();
+        setCategoryList(data);
     }
 
     return (
@@ -43,10 +55,10 @@ function AdminPage() {
                     <AdminCategoryAddPage/>
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={1}>
-                    <AdminCategoryListPage/>
+                    <AdminCategoryListPage list={categoryList} />
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={2}>
-                    상품 등록
+                    <AdminItemAddPage list={categoryList} />
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={3}>
                     상품 리스트
