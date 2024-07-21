@@ -4,14 +4,18 @@ import AdminTabPanel from "../../components/common/AdminTabPanel";
 import AdminCategoryAddPage from "./AdminCategoryAddPage";
 import AdminCategoryListPage from "./AdminCategoryListPage";
 import AdminItemAddPage from "./AdminItemAddPage";
-import { getCategoryList } from "../../js/admin/admin";
+import { getCategoryList, getItemList } from "../../js/admin/admin";
+import AdminItemListPage from "./AdminItemListPage";
 
 function AdminPage() {
     const [tab, setTab] = useState(0);
     const [categoryList, setCategoryList] = useState([]);
+    const [itemList, setItemList] = useState([]);
+    const [totalItem, setTotalItem] = useState();
 
     useEffect(() => {
         fetchCategoryList();
+        fetchItemList(1, 4);
     }, []);
 
     const handleChange = (event, newValue) => {
@@ -21,6 +25,16 @@ function AdminPage() {
     const fetchCategoryList = async () => {
         const data = await getCategoryList();
         setCategoryList(data);
+    }
+
+    const fetchItemList = async (page) => {
+        const list = await getItemList(page, 4)
+        setTotalItem(Math.ceil(list.total / 8));
+        setItemList(list.data);
+    }
+
+    const handlePageChange = (event, page) => {
+        fetchItemList(page);
     }
 
     return (
@@ -61,7 +75,7 @@ function AdminPage() {
                     <AdminItemAddPage list={categoryList} />
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={3}>
-                    상품 리스트
+                    <AdminItemListPage list={itemList} total={totalItem} pagechange={handlePageChange} />
                 </AdminTabPanel>
             </Box>
         </Box>

@@ -52,7 +52,7 @@ function ItemListPage() {
                 alignItems="center"
                 ml={2} mr={2}
             >
-                <ItemList items={categoryItemList} col={4} h={'10000'}/>
+                <ItemList to='' items={categoryItemList} col={4} h={'10000'}/>
                 <Pagination 
                     count={total}
                     onChange={handlePageChange}

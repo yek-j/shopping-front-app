@@ -43,7 +43,7 @@ function Main() {
         sx={{marginTop: 10}}
       >
         <h1>Best</h1>
-        <ItemList items={itemData} col={3} w={800} h={'300'}/>
+        <ItemList items={itemData} col={3} w={800} h={'300'} to=''/>
       </Grid>
     </>
   )
