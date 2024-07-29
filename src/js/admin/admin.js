@@ -20,7 +20,7 @@ export const getItemList = async(page, size) => {
     try {
         const res = await axios.get(import.meta.env.VITE_API_URL + 
         `/product/list?page=${page}&size=${size}`);
-
+        
         if(res.data.result == "success") {
             return res.data.value;
         } else {
@@ -31,4 +31,26 @@ export const getItemList = async(page, size) => {
     }
     
     return [];
+}
+
+export const addCategory = (data) => {
+    try {
+        const url = import.meta.env.VITE_API_URL + '/product/category/add';
+        const token = localStorage.getItem('token');
+        const res = axios.post(url, data, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if(res.data.result == "success") {
+            return true;
+        } else {
+            alert(res.data.value);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    return false;
 }
