@@ -11,7 +11,10 @@ function AdminCategoryListPage(props) {
                         <ListItemText
                             primary={category.name}
                             secondary={
-                                <AdminCategory description={category.description}/>
+                                <AdminCategory 
+                                    update={props.update} 
+                                    description={category.description} 
+                                    id={category.categoryId} />
                             }
                             secondaryTypographyProps={{component: 'div'}}
                         />

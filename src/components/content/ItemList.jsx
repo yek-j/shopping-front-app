@@ -4,7 +4,8 @@ import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function ItemList(props) {
-  const detailTo = props.root;
+  const detailTo = props.root !== undefined ? props.root : "";
+
     return (
         <ImageList sx={{ width: props.w, height: props.h, overflow: 'hidden' }} cols={props.col} gap={8}>
           {props.items.map((item) => (

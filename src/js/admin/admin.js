@@ -33,15 +33,16 @@ export const getItemList = async(page, size) => {
     return [];
 }
 
-export const addCategory = (data) => {
+export const addCategory = async (data) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/add';
-        const token = localStorage.getItem('token');
-        const res = axios.post(url, data, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const token = JSON.parse(localStorage.getItem('token')).value;
+        const headers = {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+
+        const res = await axios.post(url, data, {headers});
 
         if(res.data.result == "success") {
             return true;
@@ -53,4 +54,25 @@ export const addCategory = (data) => {
     }
 
     return false;
+}
+
+export const deleteCategory = async (data) => {
+    try {
+        const url = import.meta.env.VITE_API_URL + '/product/category/delete';
+        const token = JSON.parse(localStorage.getItem('token')).value;
+        const headers = {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+
+        const res = await axios.post(url, data, {headers});
+  
+        if(res.data.result == "success") {
+            return true;
+        } else {
+            alert(res.data.value);
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }

@@ -2,8 +2,8 @@ import { FormControl, TextField, Button, Stack } from "@mui/material";
 import React from "react";
 import { addCategory } from "../../js/admin/admin";
 
-function AdminCategoryAddPage() {
-    const handleSubmit = (event) => {
+function AdminCategoryAddPage(props) {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         const data = new FormData(event.target.form);
@@ -12,10 +12,11 @@ function AdminCategoryAddPage() {
             description: data.get('categorydescription'),
         };
 
-        const result = addCategory(paramData);
+        const result = await addCategory(paramData);
 
         if(result) {
             alert('카테고리 등록 성공');
+            props.update();
         }
     }
 

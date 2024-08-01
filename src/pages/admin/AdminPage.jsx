@@ -66,10 +66,10 @@ function AdminPage() {
                 }}
             >
                 <AdminTabPanel value={tab} index={0}>
-                    <AdminCategoryAddPage/>
+                    <AdminCategoryAddPage update={fetchCategoryList}/>
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={1}>
-                    <AdminCategoryListPage list={categoryList} />
+                    <AdminCategoryListPage list={categoryList} update={fetchCategoryList} />
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={2}>
                     <AdminItemAddPage list={categoryList} />
