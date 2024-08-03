@@ -33,14 +33,20 @@ export const getItemList = async(page, size) => {
     return [];
 }
 
+export const getHeader = () => {
+    const token = JSON.parse(localStorage.getItem('token')).value;
+    const headers = {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    return headers;
+}
+
 export const addCategory = async (data) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/add';
-        const token = JSON.parse(localStorage.getItem('token')).value;
-        const headers = {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
+        const headers = getHeader();
 
         const res = await axios.post(url, data, {headers});
 
@@ -59,11 +65,7 @@ export const addCategory = async (data) => {
 export const deleteCategory = async (data) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/delete';
-        const token = JSON.parse(localStorage.getItem('token')).value;
-        const headers = {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
+        const headers = getHeader();
 
         const res = await axios.post(url, data, {headers});
   
@@ -76,3 +78,22 @@ export const deleteCategory = async (data) => {
         console.log(e);
     }
 }
+
+export const updateCategory = async (data, update) => {
+    try {
+        const url = import.meta.env.VITE_API_URL + '/product/category/update';
+        const headers = getHeader();
+
+        const res = await axios.put(url, data, {headers});
+
+        if(res.data.result == "success") {
+            alert('업데이트 성공');
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.log(e);
+    } 
+}
+
