@@ -33,20 +33,21 @@ export const getItemList = async(page, size) => {
     return [];
 }
 
-export const getHeader = () => {
+export const getHeader = (type) => {
     const token = JSON.parse(localStorage.getItem('token')).value;
     const headers = {
-        'Content-type': 'application/json',
+        'Content-type': `${type}`,
         'Authorization': `Bearer ${token}`
     };
 
     return headers;
 }
 
+
 export const addCategory = async (data) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/add';
-        const headers = getHeader();
+        const headers = getHeader('application/json');
 
         const res = await axios.post(url, data, {headers});
 
@@ -65,7 +66,7 @@ export const addCategory = async (data) => {
 export const deleteCategory = async (data) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/delete';
-        const headers = getHeader();
+        const headers = getHeader('application/json');
 
         const res = await axios.post(url, data, {headers});
   
@@ -82,7 +83,7 @@ export const deleteCategory = async (data) => {
 export const updateCategory = async (data, update) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/category/update';
-        const headers = getHeader();
+        const headers = getHeader('application/json');
 
         const res = await axios.put(url, data, {headers});
 
@@ -97,3 +98,23 @@ export const updateCategory = async (data, update) => {
     } 
 }
 
+export const addProduct = async (data, update) => {
+    try {
+        const url = import.meta.env.VITE_API_URL + '/product/add';
+        const token = JSON.parse(localStorage.getItem('token')).value;
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+
+        const res = await axios.post(url, data, {headers});
+
+        if(res.data.result == "success") {
+            alert('상품 추가 성공');
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.log(e);
+    }
+}

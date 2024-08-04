@@ -1,6 +1,7 @@
 import { FormControl, Stack, TextField, Button, Grid, InputLabel, Select, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import UploadPreviewImages from "../../components/common/UploadPreviewImages";
+import { addProduct } from "../../js/admin/admin";
 
 function AdminItemAddPage(props) {
     const [categoryId, setCategoryId] = useState();
@@ -25,13 +26,35 @@ function AdminItemAddPage(props) {
         setImages(prevImages => prevImages.filter((_, i) => i !== index));
     }
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.target.form);
+        const productData = {
+            name: data.get('name'),
+            price: Number(data.get('price')),
+            description: data.get('description'),
+            categoryId: categoryId,
+            quantity: Number(data.get('quantity'))
+        }
+
+        const formData = new FormData();
+        formData.append('product', JSON.stringify(productData));
+        //formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
+        for (const img of images) {
+            formData.append('image', img);
+        }
+        
+        await addProduct(formData, props.update)
+    }
+
     return(
         <Stack
             sx={{ 
                 width: '50%'
             }}
+           component="form"
         >
-            <FormControl sx={{ marginBottom: 3 }}>
+            <FormControl>
                 <InputLabel id="categoryLabel">카테고리</InputLabel>
                 <Select
                     labelId="categoryLabel"
@@ -45,32 +68,46 @@ function AdminItemAddPage(props) {
                         <MenuItem key={category.categoryId} value={category.categoryId}>{category.name}</MenuItem>
                     ))}
                 </Select>
+            </FormControl>
+            <FormControl>
                 <TextField
                     required
                     id="name"
+                    name="name"
                     label="상품 이름"
                     sx={{ width: '50%', marginBottom: 3}}
                 />
+            </FormControl>
+            <FormControl>
                 <TextField
                     type="number"
                     label="상품 가격"
                     id="price"
+                    name="price"
                     sx={{ width: '50%', marginBottom: 3}}  
                 />
+            </FormControl>
+            <FormControl>
                 <TextField
                     type="number"
                     label="상품 재고"
                     id="quantity"
+                    name="quantity"
                     sx={{ width: '50%', marginBottom: 3}}  
                 />
+            </FormControl>
+            <FormControl>
                 <TextField 
                     fullWidth
                     multiline
                     rows={5}
-                    id="productDescription"
+                    id="description"
+                    name="description"
                     label="상품 설명"
                     sx={{ marginBottom: 1}}  
                 />
+            </FormControl>
+            <FormControl sx={{marginBottom: 3}}>
                 <Grid 
                     container 
                     spacing={2} 
@@ -86,6 +123,7 @@ function AdminItemAddPage(props) {
                             파일 선택
                             <input 
                                 id="image" 
+                                name="image"
                                 onChange={imageChange} 
                                 type="file" 
                                 hidden 
@@ -95,7 +133,7 @@ function AdminItemAddPage(props) {
                     </Grid>
                 </Grid>
             </FormControl>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" onClick={handleSubmit}>
                 상품 등록
             </Button>
         </Stack>
