@@ -15,8 +15,9 @@ function AdminItemAddPage(props) {
         const imgLists = event.target.files;
         let imgUrlLists = [...images];
         for (let i = 0; i < imgLists.length; i++) {
-            const curImgUrl = URL.createObjectURL(imgLists[i]);
-            if(imgUrlLists.length < 5) imgUrlLists.push(curImgUrl);
+            const file = imgLists[i];
+            const preview = URL.createObjectURL(file);
+            if(imgUrlLists.length < 5) imgUrlLists.push({file, preview});
         } 
 
         setImages(imgUrlLists);
@@ -38,10 +39,10 @@ function AdminItemAddPage(props) {
         }
 
         const formData = new FormData();
-        formData.append('product', JSON.stringify(productData));
-        //formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
+        
+        formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
         for (const img of images) {
-            formData.append('image', img);
+            formData.append('image', img.file);
         }
         
         await addProduct(formData, props.update)
@@ -83,6 +84,7 @@ function AdminItemAddPage(props) {
                     type="number"
                     label="상품 가격"
                     id="price"
+                    InputProps={{ inputProps: { min: 1 } }}
                     name="price"
                     sx={{ width: '50%', marginBottom: 3}}  
                 />
@@ -90,6 +92,7 @@ function AdminItemAddPage(props) {
             <FormControl>
                 <TextField
                     type="number"
+                    InputProps={{ inputProps: { min: 1 } }}
                     label="상품 재고"
                     id="quantity"
                     name="quantity"

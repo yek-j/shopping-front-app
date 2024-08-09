@@ -9,10 +9,10 @@ function UploadPreviewImages(props) {
             sx={{ height: '100%', width: '100%'}}
         >
             {props.imgs.map((img, index) => (
-                <ImageListItem key={img} >
+                <ImageListItem key={img.preview} >
                     <img
-                        srcSet={img}
-                        src={img}
+                        srcSet={img.preview}
+                        src={img.preview}
                     />
                     <ImageListItemBar
                          sx={{

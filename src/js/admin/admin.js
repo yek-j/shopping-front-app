@@ -101,10 +101,7 @@ export const updateCategory = async (data, update) => {
 export const addProduct = async (data, update) => {
     try {
         const url = import.meta.env.VITE_API_URL + '/product/add';
-        const token = JSON.parse(localStorage.getItem('token')).value;
-        const headers = {
-            'Authorization': `Bearer ${token}`
-        };
+        const headers = getHeader('multipart/form-data')
 
         const res = await axios.post(url, data, {headers});
 
