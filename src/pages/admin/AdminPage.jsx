@@ -28,8 +28,8 @@ function AdminPage() {
     }
 
     const fetchItemList = async (page) => {
-        const list = await getItemList(page, 4)
-        setTotalItem(Math.ceil(list.total / 8));
+        const list = await getItemList(page, 10)
+        setTotalItem(Math.ceil(list.total / 10));
         setItemList(list.data);
     }
 
