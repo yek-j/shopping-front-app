@@ -115,3 +115,35 @@ export const addProduct = async (data, update) => {
         console.log(e);
     }
 }
+
+export const getProductDetail = async (id) => {
+    const url = `${import.meta.env.VITE_API_URL}/product/${id}`;
+    try {
+        const res = await axios.get(url);
+        if(res.data.result == 'success') {
+            return res.data.value;
+        } else {
+            alert('상품 정보를 가져오는데 실패했습니다.');
+        }
+    }catch(e) {
+        console.error(e);
+    }
+}
+
+export const updateProduct = async (data, update) => {
+    try {
+        const url = import.meta.env.VITE_API_URL + '/product/update';
+        const headers = getHeader('multipart/form-data')
+
+        const res = await axios.put(url, data, {headers});
+
+        if(res.data.result == "success") {
+            alert('상품 수정 성공');
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.log(e);
+    }
+}

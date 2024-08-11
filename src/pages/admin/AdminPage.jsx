@@ -75,7 +75,13 @@ function AdminPage() {
                     <AdminItemAddPage list={categoryList} update={fetchItemList} />
                 </AdminTabPanel>
                 <AdminTabPanel value={tab} index={3}>
-                    <AdminItemListPage list={itemList} total={totalItem} pagechange={handlePageChange} />
+                    <AdminItemListPage 
+                        list={itemList} 
+                        total={totalItem} 
+                        pagechange={handlePageChange} 
+                        update={fetchItemList} 
+                        categoryList={categoryList}
+                    />
                 </AdminTabPanel>
             </Box>
         </Box>

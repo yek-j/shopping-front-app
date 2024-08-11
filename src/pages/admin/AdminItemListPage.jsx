@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Stack, Pagination, List, ListItemAvatar, Avatar, Box, Typography, ListItemButton } from "@mui/material";
+import AdminItemUpdateDialog from "../../components/content/AdminItemUpdateDialog";
 
 function AdminItemListPage(props) {
+    const [open, setOpen] = useState(false);
+    const [productId, setProductId] = useState();
+
     const handleItemClick = (item) => {
-        console.log(item);
+        setProductId(item.productId);
+        setOpen(true);
     }
 
     return (
         <Stack
             ml={2} mr={2}
         >
+            <AdminItemUpdateDialog 
+                open={open}
+                close={() => setOpen(false)}
+                productId={productId}
+                update={props.update}
+                list={props.categoryList}
+            />
             <List>
                 {props.list.length === 0 && <span>상품이 없습니다.</span>}
                 {props.list.map((item) => (
