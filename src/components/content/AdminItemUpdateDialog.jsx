@@ -9,6 +9,7 @@ function AdminItemUpdateDialog(props) {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
+        setImages([]);
         getDetail();
     }, [props.productId]);
 
@@ -59,11 +60,20 @@ function AdminItemUpdateDialog(props) {
                 onSubmit: (event) => {
                     event.preventDefault();
                     const productData = new FormData(event.currentTarget);
-                    const productJson = Object.fromEntries(productData.entries());
+
+                    const data = {
+                        name: productData.get('name'),
+                        description: productData.get('description'),
+                        price: productData.get('price'),
+                        quantity: productData.get('quantity'),
+                        categoryId: productData.get('categoryId')
+                    };
+                    console.log(data);
+                    //const productJson = Object.fromEntries(productData.entries());
 
                     const formData = new FormData();
-
-                    formData.append('product', new Blob([JSON.stringify(productJson)], { type: 'application/json' }));
+                    
+                    formData.append('product', new Blob([JSON.stringify(data)], { type: 'application/json' }));
                     for (const img of images) {
                         formData.append('image', img.file);
                     }
