@@ -62,14 +62,13 @@ function AdminItemUpdateDialog(props) {
                     const productData = new FormData(event.currentTarget);
 
                     const data = {
+                        productId: productData.get('productId'),
                         name: productData.get('name'),
                         description: productData.get('description'),
                         price: productData.get('price'),
                         quantity: productData.get('quantity'),
                         categoryId: productData.get('categoryId')
                     };
-                    console.log(data);
-                    //const productJson = Object.fromEntries(productData.entries());
 
                     const formData = new FormData();
                     
