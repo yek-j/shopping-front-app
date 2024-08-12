@@ -86,7 +86,7 @@ function AdminItemUpdateDialog(props) {
                 {"상품 수정"}
             </DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, my: 0.5}}>
-                <input type="hidden" id="productId" name="productId" value={props.problemId} />
+                <input type="hidden" id="productId" name="productId" value={props.productId} />
                 <TextField
                     id="name"
                     name="name"
