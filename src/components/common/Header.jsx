@@ -3,13 +3,17 @@ import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
 import { Logout, getTokenWithExpiry } from "../../js/user/logout";
-import { useRecoilState, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { categoryAtom, categorySelector } from "../../js/state/categoryState";
 import { Link } from "react-router-dom";
+import { cartListAtom, cartTotalSelector, getCartList } from "../../js/state/cartState";
 
 function Header() {
     const [state, setState] = useState(false);
+    const [cartState, setCartState] = useState(false);
     const [category, setCategory] = useState([]);
+    const [, setCartList] = useRecoilState(cartListAtom);
+    const cartTotal = useRecoilValue(cartTotalSelector);
     const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
     const [categoryState, setCategoryState] = useRecoilState(categoryAtom);
 
@@ -17,12 +21,15 @@ function Header() {
         const token = getTokenWithExpiry();
         if(token != null) {
             setState(true);
+            if(!cartState) setCartList(getCartList());
+            setCartState(!cartState);
         }
         
         if(category.length === 0 && useCategoryLoadable.state === 'hasValue') {
             setCategoryState(useCategoryLoadable.contents);
         } 
         setCategory(categoryState);
+        console.log(cartTotal);
     }, [state, useCategoryLoadable.state, useCategoryLoadable.contents ]);
 
     const handleLogout = async () => {
@@ -65,7 +72,7 @@ function Header() {
                         </Tooltip>
                         <Tooltip title="장바구니">
                             <IconButton href="/cart" size="large" aria-label="shopping basket" color="inherit">
-                                <Badge badgeContent={1} color="error">
+                                <Badge badgeContent={cartTotal} color="error">
                                     <ShoppingBasketIcon/>
                                 </Badge>
                             </IconButton>
