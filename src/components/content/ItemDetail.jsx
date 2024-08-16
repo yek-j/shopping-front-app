@@ -3,11 +3,15 @@ import Carousel from "./Carousel";
 import { Box, Button, Divider, Grid, Stack, TextField } from "@mui/material";
 import { getCurrentPrice, movePrimaryItem } from "../../js/item/itemDetail";
 import ItemReview from "./ItemReview";
+import { addCart } from "../../js/cart/cart";
+import { useRecoilState } from "recoil";
+import { cartStateAtom } from "../../js/state/cartState";
 
 function ItemDetail(props) {
     const [arrImg, setArrImg] = useState([]);
-    const [amount, setAmount] = useState(1);
+    const [quantity, setQuantity] = useState(1);
     const [curPrice, setCurPrice] = useState(0);
+    const [, setCartState] = useRecoilState(cartStateAtom);
     
     useEffect(() => {
        // 이미지에서 대표 이미지를 가장 앞으로
@@ -16,14 +20,23 @@ function ItemDetail(props) {
             setArrImg(imglist);
        } 
        setCurPrice(props.item.price);
-       console.log(props.item);
     }, []);
 
-    const handleAmountChange = (event) => {
-        setAmount(event.target.value);
+    const handleQuantityChange = (event) => {
+        setQuantity(event.target.value);
         const result = getCurrentPrice(props.item.price, event.target.value);
         
         setCurPrice(result);
+    }
+
+    const addItem = async () => {
+        const data = {
+            productId: props.item.productId,
+            quantity: quantity,
+        }
+        
+        const result = addCart(data);
+        if(result) setCartState(true);
     }
 
     return(
@@ -48,15 +61,15 @@ function ItemDetail(props) {
                             marginBottom: 2
                         }}
                         type="number"
-                        value={amount}
+                        value={quantity}
                         label="수량"
-                        onChange={handleAmountChange}
+                        onChange={handleQuantityChange}
                     />
                     <div>
                         <h1>합계 :  {curPrice}원</h1>
                     </div>
                     <Stack direction="row" spacing={2}>
-                        <Button size="large" color="primary" variant="contained">장바구니</Button>
+                        <Button size="large" color="primary" onClick={addItem} variant="contained">장바구니</Button>
                         <Button size="large" color="info" variant="contained">구매하기</Button>
                     </Stack>
                 </Grid>

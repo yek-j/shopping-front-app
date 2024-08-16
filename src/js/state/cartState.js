@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 import axios from "axios";
 
 export const cartListAtom = atom({
@@ -6,17 +6,19 @@ export const cartListAtom = atom({
     default: [],
 });
 
-export const cartTotalSelector = selector({
-    key: 'cartTotalSelector',
-    get: ({ get }) => {
-        const cartlist = get(cartListAtom);
-        return cartlist.length;
-    }
+export const cartStateAtom = atom({
+    key: 'cartStateAtom',
+    default: false,
 });
 
 export const getCartList = async () => {
+    const token = JSON.parse(localStorage.getItem('token')).value;
+    const headers = {
+        'Authorization': `Bearer ${token}`
+    };
+    const url = import.meta.env.VITE_API_URL + '/cart/list';
     try {
-        const res = await axios.get(import.meta.env.VITE_API_URL + '/cart/list');
+        const res = await axios.get(url, {headers});
         if(res.data.result == "success") {
             return res.data.value.data;
         }

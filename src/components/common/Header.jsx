@@ -3,38 +3,47 @@ import {Box, Tooltip, AppBar, Toolbar, CssBaseline, Button, IconButton, Badge}  
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import PersonIcon from '@mui/icons-material/Person';
 import { Logout, getTokenWithExpiry } from "../../js/user/logout";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { categoryAtom, categorySelector } from "../../js/state/categoryState";
 import { Link } from "react-router-dom";
-import { cartListAtom, cartTotalSelector, getCartList } from "../../js/state/cartState";
+import { cartListAtom, getCartList, cartStateAtom } from "../../js/state/cartState";
 
 function Header() {
     const [state, setState] = useState(false);
-    const [cartState, setCartState] = useState(false);
+    const [cartState, setCartState] = useRecoilState(cartStateAtom);
     const [category, setCategory] = useState([]);
-    const [, setCartList] = useRecoilState(cartListAtom);
-    const cartTotal = useRecoilValue(cartTotalSelector);
+    const [cartList, setCartList] = useRecoilState(cartListAtom);
     const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
     const [categoryState, setCategoryState] = useRecoilState(categoryAtom);
+    const [cartTotal, setCartTotal] = useState(0);
 
     useEffect(() => {
         const token = getTokenWithExpiry();
         if(token != null) {
             setState(true);
-            if(!cartState) setCartList(getCartList());
-            setCartState(!cartState);
+            if(cartState == false) getCartTotal();
+            else {
+                setCartTotal(cartList.length);
+            }
+            setCartState(true);
         }
         
         if(category.length === 0 && useCategoryLoadable.state === 'hasValue') {
             setCategoryState(useCategoryLoadable.contents);
         } 
         setCategory(categoryState);
-        console.log(cartTotal);
-    }, [state, useCategoryLoadable.state, useCategoryLoadable.contents ]);
+    }, [cartState, state, useCategoryLoadable.state, useCategoryLoadable.contents]);
 
     const handleLogout = async () => {
         const result = await Logout();
         setState(result);
+    }
+
+    const getCartTotal = async () => {
+        const list = await getCartList();
+        setCartList(list);
+        const total = await list.length;
+        setCartTotal(total);
     }
 
     const login = <Button href="/login" size="small" color="inherit" sx={{ marginLeft: 10 }}>LOGIN</Button>
