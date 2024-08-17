@@ -5,7 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Logout, getTokenWithExpiry } from "../../js/user/logout";
 import { useRecoilState, useRecoilValueLoadable } from "recoil";
 import { categoryAtom, categorySelector } from "../../js/state/categoryState";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cartListAtom, getCartList, cartStateAtom } from "../../js/state/cartState";
 
 function Header() {
@@ -16,6 +16,7 @@ function Header() {
     const useCategoryLoadable = useRecoilValueLoadable(categorySelector);
     const [categoryState, setCategoryState] = useRecoilState(categoryAtom);
     const [cartTotal, setCartTotal] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = getTokenWithExpiry();
@@ -37,6 +38,7 @@ function Header() {
     const handleLogout = async () => {
         const result = await Logout();
         setState(result);
+        navigate('/');
     }
 
     const getCartTotal = async () => {
