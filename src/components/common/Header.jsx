@@ -33,7 +33,7 @@ function Header() {
             setCategoryState(useCategoryLoadable.contents);
         } 
         setCategory(categoryState);
-    }, [cartState, state, useCategoryLoadable.state, useCategoryLoadable.contents]);
+    }, [cartList, state, useCategoryLoadable.state, useCategoryLoadable.contents]);
 
     const handleLogout = async () => {
         const result = await Logout();

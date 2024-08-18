@@ -5,13 +5,13 @@ import { getCurrentPrice, movePrimaryItem } from "../../js/item/itemDetail";
 import ItemReview from "./ItemReview";
 import { addCart } from "../../js/cart/cart";
 import { useRecoilState } from "recoil";
-import { cartStateAtom } from "../../js/state/cartState";
+import { cartListAtom, getCartList } from "../../js/state/cartState";
 
 function ItemDetail(props) {
     const [arrImg, setArrImg] = useState([]);
     const [quantity, setQuantity] = useState(1);
     const [curPrice, setCurPrice] = useState(0);
-    const [, setCartState] = useRecoilState(cartStateAtom);
+    const [, setCartList] = useRecoilState(cartListAtom);
     
     useEffect(() => {
        // 이미지에서 대표 이미지를 가장 앞으로
@@ -35,8 +35,12 @@ function ItemDetail(props) {
             quantity: quantity,
         }
         
-        const result = addCart(data);
-        if(result) setCartState(true);
+        addCart(data, updateCart);
+    }
+
+    const updateCart = async () => {
+        const newList = await getCartList();
+        setCartList(newList);
     }
 
     return(
