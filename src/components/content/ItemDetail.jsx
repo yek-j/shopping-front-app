@@ -6,13 +6,16 @@ import ItemReview from "./ItemReview";
 import { addCart } from "../../js/cart/cart";
 import { useRecoilState } from "recoil";
 import { cartListAtom, getCartList } from "../../js/state/cartState";
+import { useNavigate } from "react-router-dom";
+import { getTokenWithExpiry } from "../../js/user/logout";
 
 function ItemDetail(props) {
+    const navigate = useNavigate();
     const [arrImg, setArrImg] = useState([]);
     const [quantity, setQuantity] = useState(1);
     const [curPrice, setCurPrice] = useState(0);
     const [, setCartList] = useRecoilState(cartListAtom);
-    
+
     useEffect(() => {
        // 이미지에서 대표 이미지를 가장 앞으로
        if (props.item.image.length > 0) {
@@ -42,6 +45,24 @@ function ItemDetail(props) {
         const newList = await getCartList();
         setCartList(newList);
     }
+    
+    const orderItem = async () => {
+        const data = [{
+            productId: props.item.productId,
+            name: props.item.name,
+            price: props.item.price,
+            quantity: quantity,
+        }];
+
+        const token = getTokenWithExpiry();
+        if(token != null) {
+            // Order Page로
+            navigate('/order', { state: { data } });
+        } else {
+            alert("로그인 후 구매 가능합니다.");
+            navigate('/login');
+        }
+    };
 
     return(
         <Box
@@ -74,7 +95,7 @@ function ItemDetail(props) {
                     </div>
                     <Stack direction="row" spacing={2}>
                         <Button size="large" color="primary" onClick={addItem} variant="contained">장바구니</Button>
-                        <Button size="large" color="info" variant="contained">구매하기</Button>
+                        <Button size="large" color="info" onClick={orderItem} variant="contained">구매하기</Button>
                     </Stack>
                 </Grid>
              </Grid>
