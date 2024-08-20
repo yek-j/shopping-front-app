@@ -1,4 +1,4 @@
-import { Box, Button, CssBaseline, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import { Box, Button, CssBaseline, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
 import { useLocation } from "react-router-dom";
@@ -8,6 +8,7 @@ function OrderPage() {
     const location = useLocation();
     const orderData = location.state || {data: []};
     const [total, setTotal] = useState(0);
+    const [memo, setMemo] = useState('');
     
     useEffect(() => {
         if(orderData.data.length > 0) {
@@ -52,7 +53,18 @@ function OrderPage() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Grid container spacing={3} sx={{marginTop: 2}} >
+                <Box
+                    sx={{marginTop: 2}}
+                >
+                    <TextField
+                        label="요청 사항 메시지"
+                        value={memo}
+                        onChange={(e) => setMemo(e.target.value)}
+                        fullWidth
+                    />
+                </Box>
+
+                <Grid container spacing={2} sx={{marginTop: 2}} >
                     <Grid item sm={10} >
                         <Typography variant="h6">총합 : {total}</Typography>
                     </Grid>
