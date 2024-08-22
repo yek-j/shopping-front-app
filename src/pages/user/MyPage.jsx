@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
-import { Box, CssBaseline } from "@mui/material";
+import { Box, CssBaseline, Divider, Tab, Tabs } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Padding } from "@mui/icons-material";
+import TabPanel from "../../components/common/TabPanel";
+import UserInfoPage from "./UserInfoPage";
 
 function MyPage() {
+    const navigate = useNavigate();
+    const [tab, setTab] = useState(0);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(!token) {
+            navigate('/login');
+        }
+    },[]);
+
+    const handleTab = (e, newValue) => {
+        setTab(newValue);
+    }
+
     return (
         <Box>
             <Header/>
@@ -16,8 +34,32 @@ function MyPage() {
                 }}
             >
                 <h3>마이페이지</h3>
-                <hr/>
-                
+                <Divider/>
+                <Tabs
+                    value={tab}
+                    onChange={handleTab}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="product tab"
+                    sx={{
+                        marginY: 3
+                    }}
+                >
+                    <Tab label="회원 정보"/>
+                    <Tab label="주문 정보"/>
+                    <Tab label="리뷰 관리"/>
+                </Tabs>
+                <Box>
+                    <TabPanel value={tab} index={0}>
+                        <UserInfoPage/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={1}>
+                        주문 정보
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        리뷰 관리
+                    </TabPanel>
+                </Box>
             </Box>
         </Box>
     );
