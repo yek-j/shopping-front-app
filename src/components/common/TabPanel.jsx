@@ -1,6 +1,6 @@
 import React from "react";
 
-function AdminTabPanel(props) {
+function TabPanel(props) {
     const { children, value, index} = props;
     return (
         <div
@@ -13,4 +13,4 @@ function AdminTabPanel(props) {
     );
 }
 
-export default AdminTabPanel;
+export default TabPanel;

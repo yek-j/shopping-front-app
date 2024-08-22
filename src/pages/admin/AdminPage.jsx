@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppBar, Box, CssBaseline, Tab, Tabs, Toolbar } from "@mui/material";
-import AdminTabPanel from "../../components/common/AdminTabPanel";
+import AdminTabPanel from "../../components/common/TabPanel";
 import AdminCategoryAddPage from "./AdminCategoryAddPage";
 import AdminCategoryListPage from "./AdminCategoryListPage";
 import AdminItemAddPage from "./AdminItemAddPage";
