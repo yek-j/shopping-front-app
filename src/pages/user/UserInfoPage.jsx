@@ -1,18 +1,42 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getUser } from "../../js/user/user";
+import { getUser, updateUser } from "../../js/user/user";
 
 function UserInfoPage() {
     const [user, setUser] = useState({});
+    const [pwd, setPwd] = useState('');
+    const [pwdChk, setPwdChk] = useState('');
 
     useEffect(() => {
         fetchUser();
-        console.log(user);
     }, []);
 
     const fetchUser = async () => {
         const result = await getUser();
         setUser(result);
+    }
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setUser((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleUpdate = () => {
+        if(pwd.trim() != '') {
+            if(pwd === pwdChk) {
+                setUser((prev) => ({
+                    ...prev,
+                    password: pwd
+                }));
+            } else {
+                alert("비밀번호 확인이 일치하지 않습니다.");
+            }
+        }
+
+        updateUser(user);
     }
 
     return (
@@ -27,6 +51,7 @@ function UserInfoPage() {
                     name="username"
                     sx={{ width: '50%'}}
                     value={user.username}
+                    onChange={handleChange}
                 />
             </Box>
             <Box display="flex" alignItems="center" mb={2}>
@@ -39,6 +64,7 @@ function UserInfoPage() {
                     name="email"
                     sx={{ width: '50%'}}
                     value={user.email}
+                    onChange={handleChange}
                 />
             </Box>
             <Box display="flex" alignItems="center" mb={2}>
@@ -51,6 +77,8 @@ function UserInfoPage() {
                     id="password"
                     name="password"
                     sx={{ width: '50%'}}
+                    value={pwd}
+                    onChange={(e) => setPwd(e.target.value)}
                 />
             </Box>
             <Box display="flex" alignItems="center" mb={2}>
@@ -63,10 +91,12 @@ function UserInfoPage() {
                     id="passwordchk"
                     name="passwordchk"
                     sx={{ width: '50%'}}
+                    value={pwdChk}
+                    onChange={(e) => setPwdChk(e.target.value)}
                 />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2}}>
-                <Button variant="contained" color="primary">사용자 정보 수정</Button>
+                <Button variant="contained" color="primary" onClick={handleUpdate}>사용자 정보 수정</Button>
             </Box>
         </Paper>
     );
