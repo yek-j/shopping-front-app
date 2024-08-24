@@ -37,3 +37,23 @@ export const updateUser = async (data) => {
         console.error(e);
     }
 }
+
+export const deleteUser = async () => {
+    const token = JSON.parse(localStorage.getItem('token')).value;
+    const headers = {
+        'Authorization' : `Bearer ${token}`
+    };
+    const url = import.meta.env.VITE_API_URL + '/user/delete';
+
+    try {
+        const res = await axios.delete(url, { headers });
+
+        if(res.data.result == "success") {
+            alert("회원 탈퇴 완료");
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
