@@ -24,7 +24,9 @@ function Header() {
             setState(true);
             if(cartState == false) getCartTotal();
             else {
-                setCartTotal(cartList.length);
+                if(cartList !== undefined) {
+                    setCartTotal(cartList.length);
+                }
             }
             setCartState(true);
         }
