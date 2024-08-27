@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Padding } from "@mui/icons-material";
 import TabPanel from "../../components/common/TabPanel";
 import UserInfoPage from "./UserInfoPage";
+import UserOrderListPage from "./UserOrderListPage";
 
 function MyPage() {
     const navigate = useNavigate();
@@ -54,7 +55,7 @@ function MyPage() {
                         <UserInfoPage/>
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
-                        주문 정보
+                        <UserOrderListPage/>
                     </TabPanel>
                     <TabPanel value={tab} index={2}>
                         리뷰 관리
