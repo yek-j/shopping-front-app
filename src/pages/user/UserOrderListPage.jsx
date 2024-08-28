@@ -25,7 +25,7 @@ function UserOrderListPage() {
     }
 
     return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {/* TODO 
                 기간별 주문 이력, 전체 주문 이력
                 
