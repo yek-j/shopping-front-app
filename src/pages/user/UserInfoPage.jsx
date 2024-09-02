@@ -4,7 +4,7 @@ import { deleteUser, getUser, updateUser } from "../../js/user/user";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 
 function UserInfoPage() {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({email: '', username:''});
     const [pwd, setPwd] = useState('');
     const [pwdChk, setPwdChk] = useState('');
     const [open, setOpen] = useState(false);
