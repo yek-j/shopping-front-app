@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { format, isValid } from 'date-fns';
+import dayjs from 'dayjs';
 
 export const totalPrice = (data) => {
     let total = 0;
@@ -24,8 +24,8 @@ export const formatDate = (date) => {
 }
 
 const formatDateSafely = (date) => {
-    if (date && isValid(new Date(date))) {
-      return format(new Date(date), 'yyyy-MM-dd');
+    if (date && dayjs(date).isValid()) {
+        return dayjs(date).format('YYYY-MM-DD');
     }
     return null;
 };
@@ -65,9 +65,8 @@ export const getOrderListByPeriod = async (page, size, startDate, endDate) => {
     const url = import.meta.env.VITE_API_URL + '/order/listByPeriod';
 
     try {
-        // 날짜를 ISO 문자열로 변환
-        const formattedStartDate = formatDateSafely(startDate, 'yyyy-MM-dd');
-        const formattedEndDate = formatDateSafely(endDate, 'yyyy-MM-dd');
+        const formattedStartDate = formatDateSafely(startDate);
+        const formattedEndDate = formatDateSafely(endDate);
           
         const res = await axios.get(url,
             {
