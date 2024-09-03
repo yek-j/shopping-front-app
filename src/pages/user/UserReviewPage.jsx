@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, Pagination, Typography } from "@mui/material";
 
 const tmpData = [
     { reviewId: null, productId: 1, productName: '아이템1', image: '/test/test1.png', reviewState: false },
@@ -8,8 +8,15 @@ const tmpData = [
 
 function UserReviewPage() {
     const [reviewList, setReviewList] = useState(tmpData);
+    const [reviewTotal, setReviewTotal] = useState(1);
+    const [reviewPage, setReviewPage] = useState(1);
+
+    useEffect(() => {
+        
+    }, [reviewPage])
+
     return (
-        <div>
+        <Box>
             <List>
                 {reviewList.map((review) => (
                     <div>
@@ -37,7 +44,19 @@ function UserReviewPage() {
                     </div>
                 ))}
             </List>
-        </div>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <Pagination
+                    count={reviewTotal}
+                    onChange={(e, curPage) => setReviewPage(curPage)}
+                    sx={{my: 2}}
+                />
+            </Box>
+            
+        </Box>
     );
 }
 

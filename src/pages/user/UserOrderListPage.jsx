@@ -14,7 +14,7 @@ function UserOrderListPage() {
     useEffect(() => {
         // 전체 주문 이력
         fetchOrderList();
-    },[startDate, endDate]);
+    },[startDate, endDate, orderPage]);
 
     const fetchOrderList = async () => {
         let result;
@@ -26,11 +26,6 @@ function UserOrderListPage() {
         setOrderList(result);
         // total 값이 없음
         //if(result.length != 0) setOrderTotal(Math.ceil(result.total / 10));
-    }
-
-    const handlePageChange = (e, curPage) => {
-        setOrderPage(curPage);
-        fetchOrderList();
     }
 
     const handleAllList = async () => {        
@@ -92,7 +87,7 @@ function UserOrderListPage() {
             </TableContainer>
             <Pagination 
                 count={orderTotal}
-                onChange={handlePageChange}
+                onChange={(e, curPage) => setOrderPage(curPage)}
                 sx={{marginY: 5}
             }/>
         </div>
