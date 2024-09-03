@@ -18,7 +18,6 @@ function UserOrderListPage() {
 
     const fetchOrderList = async () => {
         let result;
-        console.log(orderPage);
         if(startDate != null) {
             result = await getOrderListByPeriod(orderPage, 10, startDate, endDate);
         } else {

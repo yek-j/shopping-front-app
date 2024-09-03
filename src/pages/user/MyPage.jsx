@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
 import { Box, CssBaseline, Divider, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Padding } from "@mui/icons-material";
 import TabPanel from "../../components/common/TabPanel";
 import UserInfoPage from "./UserInfoPage";
 import UserOrderListPage from "./UserOrderListPage";
+import UserReviewPage from "./UserReviewPage";
 
 function MyPage() {
     const navigate = useNavigate();
@@ -58,7 +58,7 @@ function MyPage() {
                         <UserOrderListPage/>
                     </TabPanel>
                     <TabPanel value={tab} index={2}>
-                        리뷰 관리
+                        <UserReviewPage/>
                     </TabPanel>
                 </Box>
             </Box>
