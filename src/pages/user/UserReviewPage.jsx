@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, Pagination, Typography } from "@mui/material";
-
-const tmpData = [
-    { reviewId: null, productId: 1, productName: '아이템1', image: '/test/test1.png', reviewState: false },
-    { reviewId: 1, productId: 2, productName: '아이템2', image: '/test/test2.png', reviewState: true },
-]
+import { getReviewByUser } from "../../js/item/review";
 
 function UserReviewPage() {
-    const [reviewList, setReviewList] = useState(tmpData);
+    const [reviewList, setReviewList] = useState([]);
     const [reviewTotal, setReviewTotal] = useState(1);
     const [reviewPage, setReviewPage] = useState(1);
 
     useEffect(() => {
-        
+        fetchReviews();
     }, [reviewPage])
+
+    const fetchReviews = async () => {
+        const result = await getReviewByUser(reviewPage, 10);
+        setReviewList(result.data);
+        if(result.length != 0) setReviewTotal(Math.ceil(result.total / 10));
+    }
 
     return (
         <Box>
