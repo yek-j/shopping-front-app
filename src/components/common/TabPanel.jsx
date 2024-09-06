@@ -8,7 +8,7 @@ function TabPanel(props) {
             hidden={value !== index}
             id={`${index}`}
         > 
-            {children}
+            { value === index ? children : null }
         </div>
     );
 }
