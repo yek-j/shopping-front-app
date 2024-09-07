@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, Pagination, Typography } from "@mui/material";
 import { getReviewByUser } from "../../js/item/review";
+import ReviewDialog from "../../components/content/ReviewDialog";
 
 function UserReviewPage() {
     const [reviewList, setReviewList] = useState([]);
     const [reviewTotal, setReviewTotal] = useState(1);
     const [reviewPage, setReviewPage] = useState(1);
+
+    // Dialog
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState({});
 
     useEffect(() => {
         fetchReviews();
@@ -14,18 +19,27 @@ function UserReviewPage() {
     const fetchReviews = async () => {
         const result = await getReviewByUser(reviewPage, 10);
         setReviewList(result.data);
+        console.log(result.data);
         if(result.length != 0) setReviewTotal(Math.ceil(result.total / 10));
+    }
+
+    const addHandler = (review) => {
+        setData(review);
+        setOpen(true);
     }
 
     return (
         <Box>
+            <ReviewDialog
+                open={open}
+                close={() => setOpen(false)}
+                data={data}
+                update={fetchReviews}
+            />
             <List>
-                {reviewList.map((review) => (
-                    <div>
-                        <ListItem
-                            key={review.productId}
-                            alignItems="flex-start"
-                        >
+                {reviewList.map((review, index) => (
+                    <React.Fragment key={index}>
+                        <ListItem alignItems="flex-start">
                             <ListItemAvatar>
                                 <Avatar
                                     variant="square"
@@ -39,11 +53,11 @@ function UserReviewPage() {
                                     {review.productName}
                                 </Typography>
                             </Box>
-                            {review.reviewState && <Button>리뷰 수정</Button>}
-                            {!review.reviewState && <Button>리뷰 작성</Button>}
+                            {review.reviewStatus && <Button>리뷰 수정</Button>}
+                            {!review.reviewStatus && <Button onClick={() => addHandler(review)}>리뷰 작성</Button>}
                         </ListItem>
                         <Divider/>
-                    </div>
+                    </React.Fragment>
                 ))}
             </List>
             <Box

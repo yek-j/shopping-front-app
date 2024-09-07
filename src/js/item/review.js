@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getHeader } from "../admin/admin";
 
 export const getReviewByUser = async(page, size) => {
     const token = JSON.parse(localStorage.getItem('token')).value;
@@ -26,4 +27,21 @@ export const getReviewByUser = async(page, size) => {
     }
 
     return [];
+}
+
+export const addReview = async(data, update) => {
+    const headers = getHeader('application/json');
+    const url = import.meta.env.VITE_API_URL + '/review/add';
+
+    try {
+        const res = await axios.post(url, data, {headers});
+        
+        if(res.data.result == "success") {
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.error(e);
+    }
 }
