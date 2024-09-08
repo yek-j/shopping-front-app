@@ -1,6 +1,6 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Rating, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { addReview } from "../../js/item/review";
+import { addReview, updateReview } from "../../js/item/review";
 
 function ReviewDialog(props) {
     const [name, setName] = useState('');
@@ -11,7 +11,7 @@ function ReviewDialog(props) {
         setName(props.data.productName || '');
         setComment(props.data.comment || '');
         setRating(props.data.rating || 0);
-    }, [props.data.productId]);
+    }, [props.data.productId, props.data.reviewId]);
 
     const txt = props.data.reviewId == null ? "리뷰 추가" : "리뷰 수정";
 
@@ -30,7 +30,8 @@ function ReviewDialog(props) {
                         alert("평점을 입력하세요.");
                         return;
                     }
-                    addReview(formJson, props.update);
+                    if(props.data.reviewId == null) addReview(formJson, props.update);
+                    else updateReview(formJson, props.update);
                     props.close();
                 }
             }}

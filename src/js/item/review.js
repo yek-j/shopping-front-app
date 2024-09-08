@@ -45,3 +45,37 @@ export const addReview = async(data, update) => {
         console.error(e);
     }
 }
+
+export const updateReview = async(data, update) => {
+    const headers = getHeader('application/json');
+    const url = import.meta.env.VITE_API_URL + '/review/update';
+
+    try {
+        const res = await axios.put(url, data, {headers});
+
+        if(res.data.result == "success") {
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export const deleteReview = async(data, update) => {
+    const headers = getHeader('application/json');
+    const url = import.meta.env.VITE_API_URL + '/review/delete';
+
+    try {
+        const res = await axios.delete(url, {headers, data});
+
+        if(res.data.result == "success") {
+            update();
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.log(e);
+    }
+}

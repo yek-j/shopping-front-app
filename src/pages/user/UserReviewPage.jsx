@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Box, Button, Divider, List, ListItem, ListItemAvatar, Pagination, Typography } from "@mui/material";
-import { getReviewByUser } from "../../js/item/review";
+import { deleteReview, getReviewByUser } from "../../js/item/review";
 import ReviewDialog from "../../components/content/ReviewDialog";
 
 function UserReviewPage() {
@@ -19,13 +19,22 @@ function UserReviewPage() {
     const fetchReviews = async () => {
         const result = await getReviewByUser(reviewPage, 10);
         setReviewList(result.data);
-        console.log(result.data);
         if(result.length != 0) setReviewTotal(Math.ceil(result.total / 10));
     }
 
-    const addHandler = (review) => {
+    const dialogHandler = (review) => {
         setData(review);
         setOpen(true);
+    }
+
+    const deleteHandler = (review) => {
+        const deleteData = {
+            reviewId: review.reviewId,
+            productId: review.productId,
+            rating: review.rating,
+            comment: review.comment,
+        }
+        deleteReview(deleteData, fetchReviews);
     }
 
     return (
@@ -53,8 +62,9 @@ function UserReviewPage() {
                                     {review.productName}
                                 </Typography>
                             </Box>
-                            {review.reviewStatus && <Button>리뷰 수정</Button>}
-                            {!review.reviewStatus && <Button onClick={() => addHandler(review)}>리뷰 작성</Button>}
+                            {review.reviewStatus && <Button onClick={() => dialogHandler(review)}>리뷰 수정</Button>}
+                            {review.reviewStatus && <Button onClick={() => deleteHandler(review)}>리뷰 삭제</Button>}
+                            {!review.reviewStatus && <Button onClick={() => dialogHandler(review)}>리뷰 작성</Button>}
                         </ListItem>
                         <Divider/>
                     </React.Fragment>
