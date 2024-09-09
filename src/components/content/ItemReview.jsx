@@ -14,7 +14,6 @@ function ItemReview(props) {
     },[page]);
 
     const getReviews = async () => {
-        // 임시 데이터
         const result = await getReviewsByProduct(props.pid, page, 5);
         setReviews(result.data);
         setTotal(Math.ceil(result.total / 5)); // count 구하기
