@@ -1,30 +1,7 @@
 import { Box, Card, CardContent, Pagination, Rating, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-
-// 임시 리뷰 데이터
-const imsiReview = [
-    {
-        reviewId: 1,
-        userName: '사용자1',
-        rating: 1,
-        comment: "별로임",
-        createAt: "2024-07-07",
-    },
-    {
-        reviewId: 2,
-        userName: '사용자2',
-        rating: 2,
-        comment: "별로임",
-        createAt: "2024-07-07",
-    },
-    {
-        reviewId: 3,
-        userName: '사용자3',
-        rating: 5,
-        comment: "좋아요",
-        createAt: "2024-07-07",
-    },
-];
+import { getReviewsByProduct } from "../../js/item/review";
+import dayjs from "dayjs";
 
 function ItemReview(props) {
     const [reviews, setReviews] = useState([]);
@@ -34,17 +11,18 @@ function ItemReview(props) {
     // props로 상품ID 값을 받아 리뷰를 가져온다.
     useEffect(() => {
         getReviews();
-    },[]);
+    },[page]);
 
-    const getReviews = () => {
+    const getReviews = async () => {
         // 임시 데이터
-        setReviews(imsiReview);
-        setTotal(Math.ceil(imsiReview.length / 5)); // count 구하기
+        const result = await getReviewsByProduct(props.pid, page, 5);
+        setReviews(result.data);
+        setTotal(Math.ceil(result.total / 5)); // count 구하기
     }
 
     const handlePageChange = (event, curPage) => {
         setPage(curPage);
-      }
+    }
 
     return(
         <Stack spacing={2}>
@@ -55,6 +33,10 @@ function ItemReview(props) {
                         <Typography variant="h6">{reviews.userName}</Typography>
                         <Rating value={review.rating} readOnly />
                         <Typography variant="body1">{review.comment}</Typography>
+                        <Box display="flex" alignItems="right" justifyContent="right">
+                            <Typography variant="body2">{dayjs(review.createAt).format('YYYY년 MM월 DD일 HH:mm:ss')}</Typography>
+                        </Box>
+                        
                     </CardContent>
                 </Card>
             ))}

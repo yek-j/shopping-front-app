@@ -79,3 +79,22 @@ export const deleteReview = async(data, update) => {
         console.log(e);
     }
 }
+
+export const getReviewsByProduct = async (pid, page, size) => {
+    const url = `${import.meta.env.VITE_API_URL}/review/list/${pid}`;
+    try {
+        const res = await axios.get(url, 
+            {
+                params: {page: page, size: size}
+            },
+        );
+
+        if(res.data.result == "success") {
+            return res.data.value;
+        } else {
+            alert(res.data.value);
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
