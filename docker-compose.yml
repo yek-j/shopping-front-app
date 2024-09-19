@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  react-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+    env_file:
+      - .env
+
+  react-app-dev:
+    extends: react-app
+    environment:
+      - VITE_API_URL=http://localhost:4001
+    profiles:
+      - dev
+  
+  react-app-prod:
+    extends: react-app
+    environment:
+      - VITE_API_URL=https://project1.babychat.xyz
+    profiles:
+      - prod
