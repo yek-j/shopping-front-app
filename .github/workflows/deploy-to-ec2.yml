@@ -4,19 +4,25 @@ on:
   push:
     branches: [ main ]
 
+env:
+  VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Build and save Docker image (prod profile)
+    - name: Build Docker image
       run: |
-        docker-compose -f docker-compose.yml --profile prod build
-        docker save -o react-app-prod.tar $(docker-compose -f docker-compose.yml --profile prod config --images)
+        docker build \
+          --build-arg VITE_API_URL=${{ env.VITE_API_URL }} \
+          -t react-app:latest .
+        docker save react-app:latest > react-app.tar
 
     - name: Deploy to EC2
       env:
@@ -25,10 +31,15 @@ jobs:
         USER: ec2-user
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no react-app-prod.tar ${USER}@${HOST}:~/
-        scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml ${USER}@${HOST}:~/
+        scp -i private_key -o StrictHostKeyChecking=no react-app.tar ${USER}@${HOST}:~/
         ssh -i private_key -o StrictHostKeyChecking=no ${USER}@${HOST} '
-          docker load < react-app-prod.tar
-          rm react-app-prod.tar
-          docker-compose -f docker-compose.yml --profile prod up -d --force-recreate
+          docker load < react-app.tar
+          rm react-app.tar
+          docker stop react-app || true
+          docker rm react-app || true
+          docker run -d --name react-app \
+            -p 80:80 \
+            -p 443:443 \
+            -e VITE_API_URL=${{ env.VITE_API_URL }} \
+            react-app:latest
         '
