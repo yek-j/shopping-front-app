@@ -15,7 +15,27 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Get GitHub Actions IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+
+    - name: Add GitHub Actions IP to security group
+      run: |
+        SECURITY_GROUP_ID=${{ secrets.EC2_SECURITY_GROUP_ID }}
+        aws ec2 authorize-security-group-ingress \
+          --group-id $SECURITY_GROUP_ID \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
     - name: Build Docker image
       run: |
@@ -43,3 +63,13 @@ jobs:
             -e VITE_API_URL=${{ env.VITE_API_URL }} \
             react-app:latest
         '
+
+    - name: Remove GitHub Actions IP from security group
+      if: always()
+      run: |
+        SECURITY_GROUP_ID=${{ secrets.EC2_SECURITY_GROUP_ID }}
+        aws ec2 revoke-security-group-ingress \
+          --group-id $SECURITY_GROUP_ID \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ steps.ip.outputs.ipv4 }}/32
