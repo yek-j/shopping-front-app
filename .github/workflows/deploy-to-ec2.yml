@@ -24,6 +24,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
+    - name: Build Docker image
+      run: |
+        docker build \
+          --build-arg VITE_API_URL=${{ env.VITE_API_URL }} \
+          -t react-app:latest .
+        docker save react-app:latest > react-app.tar
+
     - name: Get GitHub Actions IP
       id: ip
       uses: haythem/public-ip@v1.2
@@ -37,22 +44,13 @@ jobs:
           --port 22 \
           --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
-    - name: Build Docker image
-      run: |
-        docker build \
-          --build-arg VITE_API_URL=${{ env.VITE_API_URL }} \
-          -t react-app:latest .
-        docker save react-app:latest > react-app.tar
-
     - name: Deploy to EC2
-      env:
-        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        HOST: ${{ secrets.EC2_HOST }}
-        USER: ec2-user
-      run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no react-app.tar ${USER}@${HOST}:~/
-        ssh -i private_key -o StrictHostKeyChecking=no ${USER}@${HOST} '
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        script: |
           docker load < react-app.tar
           rm react-app.tar
           docker stop react-app || true
@@ -62,7 +60,6 @@ jobs:
             -p 443:443 \
             -e VITE_API_URL=${{ env.VITE_API_URL }} \
             react-app:latest
-        '
 
     - name: Remove GitHub Actions IP from security group
       if: always()
