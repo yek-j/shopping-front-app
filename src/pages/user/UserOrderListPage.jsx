@@ -23,9 +23,9 @@ function UserOrderListPage() {
         } else {
             result = await getOrderListAll(orderPage, 10);
         }
-        setOrderList(result);
-        // total 값이 없음
-        //if(result.length != 0) setOrderTotal(Math.ceil(result.total / 10));
+        setOrderList(result.data);
+        
+        if(result.length != 0) setOrderTotal(Math.ceil(result.total / 10));
     }
 
     const handleAllList = async () => {        
