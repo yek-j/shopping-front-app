@@ -2,7 +2,8 @@ import { Box, Button, CssBaseline, Divider, Grid, Paper, Table, TableBody, Table
 import React, { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
 import { useLocation } from "react-router-dom";
-import { totalPrice } from "../../js/item/order";
+import { singleProductData, totalPrice } from "../../js/item/order";
+import { requestOrder } from "../../js/item/devbabys-payment";
 
 function OrderPage() {
     const location = useLocation();
@@ -15,6 +16,12 @@ function OrderPage() {
             setTotal(totalPrice(orderData.data));
         }
     },[orderData.data])
+
+    const handleOrder = async () => {
+        const token = JSON.parse(localStorage.getItem('token')).value;
+        const productList = singleProductData(orderData.data);
+        requestOrder(token, productList);
+    }
 
     return (
         <Box>
@@ -70,7 +77,7 @@ function OrderPage() {
                     </Grid>
                     <Grid item sm={2}>
                         <Box display="flex" justifyContent="flex-end">
-                            <Button size="large" variant="contained">결제하기</Button>
+                            <Button onClick={handleOrder} size="large" variant="contained">결제하기</Button>
                         </Box>
                     </Grid>
                 </Grid>

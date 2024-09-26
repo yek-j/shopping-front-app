@@ -6,6 +6,8 @@ import { cartListAtom, getCartList } from "../../js/state/cartState";
 import { Delete } from "@mui/icons-material";
 import { deleteCart, getTotalPrice } from "../../js/cart/cart";
 import CartUpdateDialog from "../../components/content/CartUpdateDialog";
+import { cartProductData } from "../../js/item/order";
+import { requestOrder } from "../../js/item/devbabys-payment";
 
 function CartPage() {
     const [state, setState] = useState(false);
@@ -38,6 +40,12 @@ function CartPage() {
     const deleteHandler = async (id) => {
         const data = {cartId: id};
         deleteCart(data, updateHandler);
+    }
+
+    const handleOrder = async () => {
+        const token = JSON.parse(localStorage.getItem('token')).value;
+        const productList = cartProductData(cartList);
+        requestOrder(token, productList);
     }
 
     const loginMovePage = <div>로그인 후에 장바구니를 확인할 수 있습니다.</div>;
@@ -110,7 +118,7 @@ function CartPage() {
                             <Typography variant="h6">전체 수량 : {total} 원</Typography>
                         </Grid>
                         <Grid item xs={1}>
-                            <Button variant="contained">결제하기</Button>
+                            <Button onClick={handleOrder} variant="contained">결제하기</Button>
                         </Grid>
                     </Grid>
                 </Stack>

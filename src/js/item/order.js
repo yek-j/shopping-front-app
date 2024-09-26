@@ -91,3 +91,27 @@ export const getOrderListByPeriod = async (page, size, startDate, endDate) => {
 
     return [];
 }
+
+// 상품 상세 페이지 결제 ProductList 데이터 생성
+export const singleProductData = (data) => {
+    const productList = {
+        product: [
+            {
+                productId: data[0].productId,
+                quantity: data[0].quantity
+            }
+        ]
+    }
+
+    return productList;
+}
+
+// 장바구니 결제 ProductList 데이터 생성 
+export const cartProductData = (data) => {
+    return {
+        product: data.map(item => ({
+            productId: item.product.productId,
+            quantity: item.quantity
+        }))
+    };
+}
