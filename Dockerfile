@@ -6,6 +6,11 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# 빌드 시 환경 변수 사용
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
+
 RUN npm run build
 
 # nginx
