@@ -71,6 +71,7 @@ function CartPage() {
                     data={updateData}
                     update={updateHandler}
                 />
+                {state && 
                 <Stack>
                     <List>
                         {cartList.length === 0 && <span>장바구니가 비어있습니다.</span>}
@@ -122,6 +123,7 @@ function CartPage() {
                         </Grid>
                     </Grid>
                 </Stack>
+                }
             </Box>
         </Box>
     );
